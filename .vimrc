@@ -44,10 +44,10 @@ endfunction
 ":p => Arquivo atual com seu caminho completo;
 
 "sobe N linhas;
-map <F5> 10k
+map <F5> 20k
 
 "desce N linhas;
-map <F6> 10j
+map <F6> 20j
 
 "saltar para a linha N teclando ENTER;
 map <CR> gg
@@ -710,7 +710,7 @@ let g:netrw_altv=1              " open files on right
 let g:netrw_preview=1           " open previews vertically
 
 fun! VexOpen(dir)
-  let g:netrw_browse_split=4    " open files in previous window
+  let g:netrw_browse_split=1    " open files in previous window
   let vex_width = 25
 
   execute "Vexplore " . a:dir
@@ -756,3 +756,14 @@ endf
 noremap <Leader><Tab> :call VexToggle(getcwd())<CR>
 noremap <Leader>f :call VexToggle("")<CR>
 "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+"Redimensionar o tamanho da janela;
+map <silent> t<left> <C-w><
+map <silent> t<down> <C-W>-
+map <silent> t<up> <C-W>+
+map <silent> t<right> <C-w>>
+
+"exibir lista de marcas no arquivo;
+map <Leader>m :marks<CR>
+
