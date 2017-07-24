@@ -433,8 +433,6 @@ function! AceJumpPalavras ()
     return
 endfunction
 
-nnoremap <M-a> :call AceJumpPalavras()<CR>
-
 
 highlight AceJumpGreyLinhas ctermfg=darkgrey guifg=lightgrey
 highlight AceJumpRedLinhas ctermfg=darkred guibg=NONE guifg=black gui=NONE
@@ -511,10 +509,6 @@ function! AceJumpLinhas ()
 
     return
 endfunction
-
-nnoremap <SPACE> :call AceJumpLinhas()<CR>
-
-"------------------------------------------------------------------------------
 
 
 function! AceJumpLetras ()
@@ -646,7 +640,10 @@ function! AceJumpLetras ()
     return
 endfunction
 
+
+map <M-a> :call AceJumpPalavras()<CR>
 map <F2> :call AceJumpLetras()<CR>
+map <SPACE> :call AceJumpLinhas()<CR>
 
 
 "Cria diretorio de backup automaticamente;
