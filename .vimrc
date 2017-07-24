@@ -523,11 +523,12 @@ function! AceJumpLetras ()
     let origSearch = @/
 
     " prompt for and capture user's search character
-    echo "AceJump to words starting with letter: "
+    echo "Procurar pelo caractere: "
     let letter = nr2char(getchar())
     " return if invalid key, mouse press, etc.
-    if len(matchstr(letter, '\k')) != 1
-        echo ""
+    if letter == ' ' "permite buscar qualquer caractere, exceto espaço em branco;
+    "if len(matchstr(letter, '\k')) != 1
+        echo "apagou"
         redraw
         return
     endif
@@ -593,7 +594,7 @@ function! AceJumpLetras ()
         redraw
 
         " prompt user again for the jump character to jump to
-        echo 'AceJump to words starting with "'.letter.'" '
+        echo 'Saltar para o local procurado por "'.letter.'" '
         let jumpChar = nr2char(getchar())
 
         " get rid of our syntax search highlighting
