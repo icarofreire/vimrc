@@ -559,7 +559,7 @@ function! AceJumpLetras ()
 
     if len(pos) > 1
         " jump characters used to mark found words (user-editable)
-        let chars = 'abcdefghijlkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,.;"[]<>{}|\\'
+        let chars = "abcdefghijlkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,.;\'\"[]<>{}|\\!@#$%&*()_-=+?:^~/`"
 
         if len(pos) > len(chars)
             " TODO add groupings here if more pos matches than jump characters
