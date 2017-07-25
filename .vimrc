@@ -102,7 +102,7 @@ set fileencoding=utf-8
 
 "deixa a barra de status visível;
 :set laststatus=2
-:set statusline=%<%F\ %h%m%r%=%-14.(%l,%c%V%)\ %=\%L\ \%P
+:set statusline=%<%F\ %n%h%m%r%=%-14.(%l,%c%V%)\ %=\%L\ \%P
 
 "abre o file explorer;
 map <S-CR> :Explore<CR>
