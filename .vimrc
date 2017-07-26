@@ -765,3 +765,5 @@ map <silent> t<right> <C-w>>
 "exibir lista de marcas no arquivo;
 map <Leader>m :marks<CR>
 
+"inserir comentário(//) no inicio da linha do cursor;
+nmap // :s/^/\/\//g<CR>:nohlsearch<CR>
