@@ -43,6 +43,18 @@ endfunction
 "%< => Nome do arquivo atual sem extensão;
 ":p => Arquivo atual com seu caminho completo;
 
+
+" Dica de REGEX para substituição e inserção;
+" \num
+" Onde num é um inteiro positivo. Faz referência a substring pertencente à um grupo, um grupo é definido entre "parênteses. Grupos são numerados de 1 até 9.
+" Repetir o conteúdo encontrado pela regex numa substituição(Para isso, deve-se utilizar grupo '()');
+"  o '\número' memoriza o conteudo do grupo captado pela regex;
+" \1 = primeiro grupo; \2 = segundo grupo; \3 = terceiro grupo; ...
+" :s/\(<regex dentro do grupo para procurar>\)/\1<conteudo para adicionar apos o match>/g
+" ou
+" :s/\(<regex dentro do grupo para procurar>\)/<conteudo para adicionar apos o match>\1/g
+
+
 "sobe N linhas;
 map <F5> 20k
 
