@@ -654,9 +654,9 @@ function! AceJumpLetras ()
 endfunction
 
 
-map <M-a> :call AceJumpPalavras()<CR>
-map <F2> :call AceJumpLetras()<CR>
-map <SPACE> :call AceJumpLinhas()<CR>
+"map <M-a> :call AceJumpPalavras()<CR>
+map <SPACE> :call AceJumpLetras()<CR>
+map <F2> :call AceJumpLinhas()<CR>
 
 
 "Cria diretorio de backup automaticamente;
