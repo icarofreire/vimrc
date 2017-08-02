@@ -179,7 +179,7 @@ map <esc><esc> :nohlsearch<CR>
 map <F11> :q<CR>
 
 "trocar de janela separada na mesma aba(o mesmo que ctrl+w);
-map <F7> :wincmd w<CR>
+map <Leader>w :wincmd w<CR>
 
 "compila um programa C++;
 map <F8> :w!<CR>:!g++ -Wall % -o %<<CR>
@@ -777,5 +777,14 @@ map <silent> t<right> <C-w>>
 "exibir lista de marcas no arquivo;
 map <Leader>m :marks<CR>
 
+"exibir a lista de alterações;
+map <Leader>c :changes<CR>
+
+"exibir a lista de saltos;
+map <Leader>j :jumps<CR>
+
+"exibir a lista de comandos;
+map <Leader>h :history<CR>
+
 "inserir comentário(//) no inicio da linha do cursor;
-nmap // :s/^/\/\//g<CR>:nohlsearch<CR>
+nmap <C-/> :s/^/\/\//g<CR>:nohlsearch<CR>
