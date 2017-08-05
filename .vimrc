@@ -254,9 +254,13 @@ endfunction
 "nnoremap <silent> <S-BS> :call <SID>GotoPattern('[A-Za-z0-9_]\(\>\\|$\)', 'b')<CR>
 
 "listar os buffers aberto;
-nmap <S-TAB> :ls<CR>
+nmap <Leader>b :ls<CR>
+
 "ir para o proximo buffer;
 nmap <TAB> :bn<CR>
+
+"ir para o buffer anterior;
+nmap <S-TAB> :bp<CR>
 
 "refresh do visual do terminal;
 nmap v<F5> :redraw!<CR>
