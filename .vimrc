@@ -792,3 +792,151 @@ map <Leader>h :history<CR>
 
 "inserir comentário(//) no inicio da linha do cursor;
 nmap <C-/> :s/^/\/\//g<CR>:nohlsearch<CR>
+"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@f
+
+
+"start the named mark prototype
+ let s:NamedMark = {}
+  
+ if has('win32') || has('win32unix') "windows/cygwin
+    let separator = '_'
+  else
+    let separator = '.'
+ endif
+
+ let caminho = $HOME . '/' . separator . 'vim/'
+ 
+ "the file the marks are stored in
+ let s:NamedMark.Filename = expand(caminho . '/.namedMarks')
+ 
+ "constructor
+ function! s:NamedMark.New(name, column, line, path)
+   if a:name =~ ' '
+     throw "IllegalNamedmarkNameError illegal name:" . a:name
+   endif
+ 
+   let newNamedMark = copy(self)
+   let newNamedMark.name = a:name
+   let newNamedMark.column = a:column
+   let newNamedMark.line = a:line
+   let newNamedMark.path = a:path
+   return newNamedMark
+ endfunction
+ 
+ "lazy load and cache all named marks
+ function! s:NamedMark.All()
+   if !exists("s:NamedMark.AllMarks")
+     let s:NamedMark.AllMarks = s:NamedMark.Read()
+   endif
+   return s:NamedMark.AllMarks
+ endfunction
+ 
+ "create and add a new mark to the list
+ function! s:NamedMark.Add(name, line, column, path)
+ 
+   try
+     "if the mark already exists, just update it
+     let mark = s:NamedMark.FindFor(a:name)
+     let mark.column = a:column
+     let mark.line = a:line
+     let mark.path = a:path
+ 
+   catch /NamedMarkNotFoundError/
+     let newMark = s:NamedMark.New(a:name, a:column, a:line, a:path)
+     call add(s:NamedMark.All(), newMark)
+ 
+   finally
+     call s:NamedMark.Write()
+   endtry
+ endfunction
+ 
+ "find the mark with the given name
+ function! s:NamedMark.FindFor(name)
+   for i in s:NamedMark.All()
+     if i.name == a:name
+       return i
+     endif
+   endfor
+   throw "NamedMarkNotFoundError no mark found for name: \"".a:name.'"'
+ endfunction
+ 
+ "get a list of all mark names
+ function! s:NamedMark.Names()
+   let names = []
+   for i in s:NamedMark.All()
+     call add(names, i.name)
+   endfor
+   return names
+ endfunction
+ 
+ "delete this mark
+ function! s:NamedMark.delete()
+   call remove(s:NamedMark.All(), index(s:NamedMark.All(), self))
+   call s:NamedMark.Write()
+ endfunction
+ 
+ "go to this mark
+ function! s:NamedMark.recall()
+   exec "edit " . self.path
+   call cursor(self.column, self.line)
+ endfunction
+ 
+ "read the marks from the filesystem and return the list
+ function! s:NamedMark.Read()
+   let marks = []
+   if filereadable(s:NamedMark.Filename)
+     let lines = readfile(s:NamedMark.Filename)
+     for i in lines
+       let name   = substitute(i, '^\(.\{-}\) \d\{-} \d\{-} .*$', '\1', '')
+       let column = substitute(i, '^.\{-} \(\d\{-}\) \d\{-} .*$', '\1', '')
+       let line   = substitute(i, '^.\{-} \d\{-} \(\d\{-}\) .*$', '\1', '')
+       let path   = substitute(i, '^.\{-} \d\{-} \d\{-} \(.*\)$', '\1', '')
+ 
+       let namedMark = s:NamedMark.New(name, column, line, path)
+       call add(marks, namedMark)
+     endfor
+   endif
+   return marks
+ endfunction
+ 
+ "write all named marks to the filesystem
+ function! s:NamedMark.Write()
+   let lines = []
+   for i in s:NamedMark.All()
+     call add(lines, i.name .' '. i.column .' '. i.line .' '. i.path)
+   endfor
+   call writefile(lines, s:NamedMark.Filename)
+ endfunction
+ 
+ "NM command, adds a new named mark
+ command! -nargs=1
+   \ NM call s:NamedMark.Add('<args>', col("."), line("."), expand("%:p"))
+ 
+ "RM command, recalls a named mark
+ command! -nargs=1 -complete=customlist,s:CompleteNamedMarks
+   \ RM call s:NamedMark.FindFor('<args>').recall()
+ 
+ "DeleteNamedMark command
+ command! -nargs=1 -complete=customlist,s:CompleteNamedMarks
+   \ DeleteNamedMark call s:NamedMark.FindFor('<args>').delete()
+ 
+ "used by the above commands for cmd line completion
+ function! s:CompleteNamedMarks(A,L,P)
+   return filter(s:NamedMark.Names(), 'v:val =~ "^' . a:A . '"')
+ endfunction
+
+ function! Listam()
+     if has('win32') || has('win32unix') "windows/cygwin
+        let separator = '_'
+      else
+        let separator = '.'
+     endif
+
+     let s:caminho = $HOME . '\' . separator . 'vim\.namedMarks'
+     
+     :vsp
+     :wincmd w
+     execute "edit " . s:caminho 
+ endfunction
+
+map <Leader>y :call Listam()<CR>
