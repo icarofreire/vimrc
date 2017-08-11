@@ -160,6 +160,9 @@ map <C-space> :call AtivarInvisiveis()<CR>
 "Exibir as alterações feitas no arquivo;
 map <S-F1> :set nomore<CR>:redir! > changes.txt<CR>:changes<CR>:redir END<CR>:set more<CR><CR>:vsp changes.txt<CR>G
 
+"Copiar para um arquivo o historico de comandos;
+map <C-h> :set nomore<CR>:redir! > history.txt<CR>:his<CR>:redir END<CR>:set more<CR><CR>:vsp history.txt<CR>G
+
 "recarregar o arquivo .vimrc apos ser editado(para não precisar reeiniciar o vim);
 map <S-F5> :so $MYVIMRC<CR>
 
