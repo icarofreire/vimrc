@@ -185,7 +185,7 @@ map <F11> :q<CR>
 map <Leader>w :wincmd w<CR>
 
 "compila um programa C++;
-map <F8> :w!<CR>:!g++ -Wall % -o %<<CR>
+map <F8> :w!<CR>:!g++ -std=c++11 -Wall % -o %<<CR>
 map <S-F8> :!%<.exe<CR>
 
 "pular palavras em rodo de inserção(alt+N);
@@ -794,7 +794,17 @@ map <Leader>j :jumps<CR>
 map <Leader>h :history<CR>
 
 "inserir comentário(//) no inicio da linha do cursor;
-nmap <C-/> :s/^/\/\//g<CR>:nohlsearch<CR>
+"nmap <C-/> :s/^/\/\//g<CR>:nohlsearch<CR>
+
+function! Inserir_e_retirar_comentario()
+    let line = getline('.')
+    if line[0] == "/" && line[1] == "/"
+        s/\/\///g "apaga comentário;
+    else
+        s/^/\/\//g "insere comentário;
+    endif
+endfunction
+nmap <C-/> :call Inserir_e_retirar_comentario()<CR>:nohlsearch<CR>
 "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@f
 
 
