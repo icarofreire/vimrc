@@ -130,10 +130,9 @@ nmap <C-RIGHT> :vsp<CR>
 nmap <C-UP> :sp<CR>
 nmap <C-DOWN> :sp<CR>
 
-"pular 10 palavras a frente;
-nmap <M-2> 10w
-"pular 10 palavras a trás;
-nmap <M-1> 10b
+"colar no arquivo o conteúdo da memoria do clipboard(texto copiado em outra
+"área no computador);
+map <M-p> "+p
 
 function! NumberToggle()
   if(&relativenumber == 1)
