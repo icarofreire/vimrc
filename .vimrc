@@ -952,3 +952,38 @@ nmap <C-/> :call Inserir_e_retirar_comentario()<CR>:nohlsearch<CR>
  endfunction
 
 map <Leader>y :call Listam()<CR>
+
+
+" 1 = esquerda; 2 = direita;
+fun! Getchar(ind)
+    let l:line = substitute(getline('.'), '\t', repeat(' ', &tabstop), 'g')
+    let letra = ""
+    if a:ind == 1
+        let letra = strcharpart(l:line, virtcol('.') - 2, 1)
+    elseif a:ind == 2
+        let letra = strcharpart(l:line, virtcol('.') , 1)
+    endif
+    return letra
+endfun
+
+" 1 = esquerda; 2 = direita;
+fun! Salto_estremidades_w(ind)
+    if a:ind == 1
+        let l = Getchar(1)
+        if l == ' '
+            normal! ge
+        else
+            normal! b
+        endif
+    else
+        let l = Getchar(2)
+        if l == ' '
+            normal! w
+        else
+            normal! e
+        endif
+    endif
+endfun
+
+nnoremap <F3> :call Salto_estremidades_w(1)<CR>
+nnoremap <F4> :call Salto_estremidades_w(2)<CR>
