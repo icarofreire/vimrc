@@ -472,7 +472,7 @@ function! AceJumpLinhas ()
     let jumps = {}
     " loop over every line on the screen (just the visible lines)
     for linha in range(line('w0'), line('w$'))
-        if( len(getline(linha)) > 0 ) "colocará as letras nas linhas não vazias;
+        "if( len(getline(linha)) > 0 ) "colocará as letras nas linhas não vazias;
 
             let char = chars[0]
             let chars = chars[1:]
@@ -480,12 +480,17 @@ function! AceJumpLinhas ()
             call setpos('.', [0,linha,1,0])
             " create jump character key to hold associated found word position
             let jumps[char] = [0,linha,1,0]
+
+            if( len(getline(linha)) == 0 ) "se for uma linha vazia, insere um caractere de espaço para poder substituir com uma letra; 
+                exe 'norm I '
+            endif
+
             " replace first character in word with current jump character
             exe 'norm r'.char
             " change syntax on the jump character to make it highly visible
             call matchadd('AceJumpRedLinhas', '\%'.linha.'l\%'.(1).'c', 50)
 
-        endif
+        "endif
     endfor
 
     call setpos('.', origPos)
@@ -987,3 +992,6 @@ endfun
 
 nnoremap <F3> :call Salto_estremidades_w(1)<CR>
 nnoremap <F4> :call Salto_estremidades_w(2)<CR>
+
+"map <F7> :s/");//g<CR>:s/$/");/g<CR>:s/=//g<CR>:s/>_/", "/g<CR>
+"map <S-F7> :s/=//g<CR>:s/>_/", "/g<CR>
