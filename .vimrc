@@ -466,7 +466,7 @@ function! AceJumpLinhas ()
     " monotone all text in visible part of window (dark grey by default)
     call matchadd('AceJumpGreyLinhas', '\%'.line('w0').'l\_.*\%'.line('w$').'l', 50)
 
-    let chars = 'abcdefghijlkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,.;"[]<>{}|\\'
+    let chars = "abcdefghijlkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,.;\'\"[]<>{}|\\!@#$%&*()_-=+?:^~/`"
 
     " jumps list to pair jump characters with found word positions
     let jumps = {}
@@ -516,7 +516,13 @@ function! AceJumpLinhas ()
         exe "norm ".ini."gg"
         exe "norm zt"
         exe "norm `9"
+
         call setpos('.', jumps[jumpChar])
+        let li = getline(jumps[jumpChar][1])[0] " pula para a primeira palavra se o primeiro caractere da linha for vazio;
+        if li == " "
+            exe "norm w"
+        endif
+
     else
         " if it didn't work out, restore original cursor position
         exe "norm ".ini."gg"
