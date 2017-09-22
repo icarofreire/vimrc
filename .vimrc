@@ -540,6 +540,8 @@ function! AceJumpLinhas ()
 endfunction
 
 
+endfunction
+
 function! AceJumpLetras ()
 
     "cria uma marca do ponto atual do cursor;
@@ -587,16 +589,12 @@ function! AceJumpLetras ()
 
         if len(pos) > len(chars)
             " TODO add groupings here if more pos matches than jump characters
-             
         endif
-
-        " trim found positions list; cannot be longer than jump markers list
-        let pos = pos[:len(chars)]
 
         " jumps list to pair jump characters with found word positions
         let jumps = {}
         " change each found word's first letter to a jump character
-        for [r,c] in pos
+        for [r,c] in pos "[len(chars):]
             " stop marking words if there are no more jump characters
             if len(chars) == 0
                 break
@@ -999,5 +997,5 @@ endfun
 nnoremap <F3> :call Salto_estremidades_w(1)<CR>
 nnoremap <F4> :call Salto_estremidades_w(2)<CR>
 
-"map <F7> :s/");//g<CR>:s/$/");/g<CR>:s/=//g<CR>:s/>_/", "/g<CR>
-"map <S-F7> :s/=//g<CR>:s/>_/", "/g<CR>
+map <F7> :s/");//g<CR>:s/$/");/g<CR>:s/=//g<CR>:s/>_/", "/g<CR>
+map <S-F7> :s/=//g<CR>:s/>_/", "/g<CR>
