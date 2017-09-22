@@ -654,7 +654,7 @@ function! AceJumpLetras ()
         call setpos('.', [0,r,c+1,0])
     elseif len(pos) == 0
         " no matches; set position back to start
-        call setpos('.', origPos)
+        exe "norm `9"
     endif
 
     :delmarks 9
