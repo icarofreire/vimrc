@@ -540,8 +540,6 @@ function! AceJumpLinhas ()
 endfunction
 
 
-endfunction
-
 function! AceJumpLetras ()
 
     "cria uma marca do ponto atual do cursor;
@@ -999,3 +997,191 @@ nnoremap <F4> :call Salto_estremidades_w(2)<CR>
 
 map <F7> :s/");//g<CR>:s/$/");/g<CR>:s/=//g<CR>:s/>_/", "/g<CR>
 map <S-F7> :s/=//g<CR>:s/>_/", "/g<CR>
+
+
+
+function! Colorir22(pos, origPos, origSearch, ini, letter, letras)
+        let jumps = {}
+        let chars = a:letras
+        "let chars = "abcdefghijlkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,.;\'\"[]<>{}|\\!@#$%&*()_-=+?:^~/`"
+
+        " jumps list to pair jump characters with found word positions
+        " change each found word's first letter to a jump character
+        for [r,c] in a:pos
+            " stop marking words if there are no more jump characters
+            if len(chars) == 0
+                break
+            endif
+            " 'pop' the next jump character from the list
+            let char = chars[0]
+            let chars = chars[1:]
+            " move cursor to the next found word
+            call setpos('.', [0,r,c+1,0])
+            " create jump character key to hold associated found word position
+            let jumps[char] = [0,r,c+1,0]
+            " replace first character in word with current jump character
+            exe 'norm r'.char
+            " change syntax on the jump character to make it highly visible
+            call matchadd('AceJumpRed', '\%'.r.'l\%'.(c+1).'c', 50)
+        endfor
+        call setpos('.', a:origPos)
+
+        exe "norm ".a:ini."gg"
+        exe "norm zt"
+        exe "norm `9"
+
+        " this redraw is critical to syntax highlighting
+        redraw
+
+        "" prompt user again for the jump character to jump to
+        echo 'Saltar para o local procurado por "'.a:letter.'" '
+        "let jumpChar = nr2char(getchar())
+        let jumpChar = getchar()
+
+        "" get rid of our syntax search highlighting
+        call clearmatches()
+        "" clear out the status line
+        echo ""
+        redraw
+        "" restore previous search register value
+        let @/ = a:origSearch
+
+        "" undo all the jump character letter replacement
+        norm u
+
+        "return jumpChar
+        return [jumps, jumpChar]
+endfunction
+
+function! AceJumpLetras2()
+    "cria uma marca do ponto atual do cursor;
+    exe "norm m9"
+    let ini = str2nr(line('w0'))+5
+    exe "norm ".ini."gg"
+
+    " store some current values for restoring later
+    let origPos = getpos('.')
+    let origSearch = @/
+
+    " prompt for and capture user's search character
+    echo "Procurar pelo caractere: "
+    let letter = nr2char(getchar())
+    " return if invalid key, mouse press, etc.
+    if letter == ' ' "permite buscar qualquer caractere, exceto espaço em branco;
+    "if len(matchstr(letter, '\k')) != 1
+        echo "apagou"
+        redraw
+        return
+    endif
+    " redraws here and there to get past 'more' prompts
+    redraw
+    " row/col positions of words beginning with user's chosen letter
+    let pos = []
+
+    " monotone all text in visible part of window (dark grey by default)
+    call matchadd('AceJumpGrey', '\%'.line('w0').'l\_.*\%'.line('w$').'l', 50)
+
+    " loop over every line on the screen (just the visible lines)
+    for row in range(line('w0'), line('w$'))
+        " find all columns on this line where a word begins with our letter
+        let col = 0
+        for l in split(getline(row), '\zs')
+            if( l == letter )
+                call add(pos, [row, col])
+            endif
+            let col = col +1
+        endfor
+    endfor
+
+    if len(pos) > 1
+        " jump characters used to mark found words (user-editable)
+        let chars = "abcdefghijlkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,.;\'\"[]<>{}|\\!@#$%&*()_-=+?:^~/`"
+        "if len(pos) > len(chars)
+            " TODO add groupings here if more pos matches than jump characters
+        "endif
+
+        let res = Colorir22(pos, origPos, origSearch, ini, letter, chars)
+        let jumps = res[0]
+        let jumpChar = res[1]
+
+        "this redraw is critical to syntax highlighting
+        "redraw
+
+        "" prompt user again for the jump character to jump to
+        "echo 'Saltar para o local procurado por "'.letter.'" '
+        "let jumpChar = nr2char(getchar())
+
+        "" get rid of our syntax search highlighting
+        "call clearmatches()
+        "" clear out the status line
+        "echo ""
+        "redraw
+        "" restore previous search register value
+        "let @/ = origSearch
+
+        "" undo all the jump character letter replacement
+        "norm u
+        
+        let partl = 0
+        while jumpChar == "\<F1>" || jumpChar == "\<F4>" && partl >= 0 && partl < len(pos)
+
+            if jumpChar == "\<F4>"
+                if (partl + len(chars)) < len(pos)
+                    let partl = partl + len(chars)
+                endif
+            elseif jumpChar == "\<F1>"
+                if partl > 0
+                    let partl = partl - len(chars)
+                endif
+            endif
+
+            let sublist = pos[partl:]
+            let res = Colorir22(sublist, origPos, origSearch, ini, letter, chars)
+            let jumps = res[0]
+            let jumpChar = res[1]
+        endwhile
+
+        let jumpC = nr2char(jumpChar)
+        " if the user input a proper jump character, jump to it
+        if has_key(jumps, jumpC)
+            exe "norm ".ini."gg"
+            exe "norm zt"
+            exe "norm `9"
+            call setpos('.', jumps[jumpC])
+        else
+            " if it didn't work out, restore original cursor position
+            exe "norm ".ini."gg"
+            exe "norm zt"
+            exe "norm `9"
+        endif
+    elseif len(pos) == 1
+        " if we only found one match, just jump to it without prompting
+        " set position to the one match
+        let [r,c] = pos[0]
+        call setpos('.', [0,r,c+1,0])
+    elseif len(pos) == 0
+        " no matches; set position back to start
+        exe "norm `9"
+    endif
+
+    :delmarks 9
+
+    " turn off all search highlighting
+    call clearmatches()
+    " clean up the status line and return
+    "echo ""
+    redraw
+echo jumpChar
+
+    return
+endfunction
+map <S-SPACE> :call AceJumpLetras2()<CR>
+
+function! Rec()
+    let letra = getchar()
+    echo letra
+    if letra == "\<F1>"
+        echo "ok"
+    endif
+endfunction
+map <S-F6> :call Rec()<CR>
