@@ -1003,7 +1003,6 @@ map <S-F7> :s/=//g<CR>:s/>_/", "/g<CR>
 function! Colorir22(pos, origPos, origSearch, ini, letter, letras)
         let jumps = {}
         let chars = a:letras
-        "let chars = "abcdefghijlkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,.;\'\"[]<>{}|\\!@#$%&*()_-=+?:^~/`"
 
         " jumps list to pair jump characters with found word positions
         " change each found word's first letter to a jump character
@@ -1049,7 +1048,6 @@ function! Colorir22(pos, origPos, origSearch, ini, letter, letras)
         "" undo all the jump character letter replacement
         norm u
 
-        "return jumpChar
         return [jumps, jumpChar]
 endfunction
 
@@ -1096,32 +1094,11 @@ function! AceJumpLetras2()
     if len(pos) > 1
         " jump characters used to mark found words (user-editable)
         let chars = "abcdefghijlkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,.;\'\"[]<>{}|\\!@#$%&*()_-=+?:^~/`"
-        "if len(pos) > len(chars)
-            " TODO add groupings here if more pos matches than jump characters
-        "endif
 
         let res = Colorir22(pos, origPos, origSearch, ini, letter, chars)
         let jumps = res[0]
         let jumpChar = res[1]
 
-        "this redraw is critical to syntax highlighting
-        "redraw
-
-        "" prompt user again for the jump character to jump to
-        "echo 'Saltar para o local procurado por "'.letter.'" '
-        "let jumpChar = nr2char(getchar())
-
-        "" get rid of our syntax search highlighting
-        "call clearmatches()
-        "" clear out the status line
-        "echo ""
-        "redraw
-        "" restore previous search register value
-        "let @/ = origSearch
-
-        "" undo all the jump character letter replacement
-        "norm u
-        
         let partl = 0
         while jumpChar == "\<F1>" || jumpChar == "\<F4>" && partl >= 0 && partl < len(pos)
 
@@ -1134,6 +1111,8 @@ function! AceJumpLetras2()
                     let partl = partl - len(chars)
                 endif
             endif
+
+        call matchadd('AceJumpGrey', '\%'.line('w0').'l\_.*\%'.line('w$').'l', 50)
 
             let sublist = pos[partl:]
             let res = Colorir22(sublist, origPos, origSearch, ini, letter, chars)
@@ -1169,19 +1148,10 @@ function! AceJumpLetras2()
     " turn off all search highlighting
     call clearmatches()
     " clean up the status line and return
-    "echo ""
+    echo ""
     redraw
-echo jumpChar
 
     return
 endfunction
 map <S-SPACE> :call AceJumpLetras2()<CR>
 
-function! Rec()
-    let letra = getchar()
-    echo letra
-    if letra == "\<F1>"
-        echo "ok"
-    endif
-endfunction
-map <S-F6> :call Rec()<CR>
