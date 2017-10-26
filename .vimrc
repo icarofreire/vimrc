@@ -112,6 +112,10 @@ set fileencoding=utf-8
 :set laststatus=2
 :set statusline=%<%F\ %n%h%m%r%=%-14.(%l,%c%V%)\ %=\%L\ \%P
 
+"abre um menu atravez da tecla tab depois de escrever o comando;
+set wildmenu
+set wildmode=longest:list,full
+
 "abre o file explorer;
 map <S-CR> :Explore<CR>
 
