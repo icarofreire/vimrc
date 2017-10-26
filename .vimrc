@@ -108,10 +108,6 @@ set smartcase  "Se começar uma busca em maiúsculo ele habilita o case
 set encoding=utf-8
 set fileencoding=utf-8
 
-"exibir espaços em branco, tab, trilha de espaços em branco, e fim de linha;
-:set listchars=eol:¬,tab:»»,trail:~,extends:>,precedes:<,space:·
-:set list
-
 "deixa a barra de status visível;
 :set laststatus=2
 :set statusline=%<%F\ %n%h%m%r%=%-14.(%l,%c%V%)\ %=\%L\ \%P
@@ -145,10 +141,12 @@ endfunc
 "Exibe uma numeração relativa a posição do cursor (para pular N linhas acima ou para baixo);
 nnoremap <F12> :call NumberToggle()<CR>
 
+"exibir espaços em branco, tab, trilha de espaços em branco, e fim de linha;
 function! AtivarInvisiveis()
   if(&list == 1)
     set list!
   else
+    set listchars=eol:¬,tab:»»,trail:~,extends:>,precedes:<,space:·
     set list
   endif
 endfunc
@@ -267,47 +265,6 @@ nmap <S-TAB> :bp<CR>
 "refresh do visual do terminal;
 nmap v<F5> :redraw!<CR>
 "*************************************************
-
-"salvar a posição da tela num determinado ponto;
-"call CurPos("save") para salvar;
-"call CurPos("restore") para restaurar;
-function CurPos(action)
-  if a:action == "save"
-    let b:saveve = &virtualedit
-    let b:savesiso = &sidescrolloff
-    set virtualedit=all
-    set sidescrolloff=0
-    let b:curline = line(".")
-    let b:curvcol = virtcol(".")
-    let b:curwcol = wincol()
-    normal! g0
-    let b:algvcol = virtcol(".")
-    normal! M
-    let b:midline = line(".")
-    execute "normal! ".b:curline."G".b:curvcol."|"
-    let &virtualedit = b:saveve
-    let &sidescrolloff = b:savesiso
-  elseif a:action == "restore"
-    let b:saveve = &virtualedit
-    let b:savesiso = &sidescrolloff
-    set virtualedit=all
-    set sidescrolloff=0
-    execute "normal! ".b:midline."Gzz".b:curline."G0"
-    let nw = wincol() - 1
-    if b:curvcol != b:curwcol - nw
-      execute "normal! ".b:algvcol."|zs"
-      let s = wincol() - nw - 1
-      if s != 0
-        execute "normal! ".s."zl"
-      endif
-    endif
-    execute "normal! ".b:curvcol."|"
-    let &virtualedit = b:saveve
-    let &sidescrolloff = b:savesiso
-    unlet b:saveve b:savesiso b:curline b:curvcol b:curwcol b:algvcol b:midline
-  endif
-  return ""
-endfunction
 
 
 " ACEJUMP
