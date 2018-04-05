@@ -33,7 +33,7 @@ function MyDiff()
 endfunction
 
 
-"*************************************************
+"---------------------------------------------------------------------------------------------
 "Configurações do vimrc;
 
 "map  - funciona em qualquer modo;
@@ -189,19 +189,99 @@ map <Leader>w :wincmd w<CR>
 map <F8> :w!<CR>:!g++ -std=c++11 -Wall % -o %<<CR>
 map <S-F8> :!%<.exe<CR>
 
-"pular palavras em rodo de inserção(alt+N);
-"w->     e->
-"  |palavra|
-"  <-b     <-ge
-imap <A-1> <C-o>b
-imap <A-2> <C-o>w
-imap <A-4> <C-o>e
-imap <A-3> <C-o>ge
-
 "salvar automaticamente o arquivo 1/2 segundo após cada alteração(SOMENTE se o arquivo
 "já existe);
 set updatetime=500
 :autocmd CursorHold,CursorHoldI,BufLeave * silent! :update
+
+"listar os buffers aberto;
+nmap <Leader>b :ls<CR>
+
+"ir para o proximo buffer;
+nmap <TAB> :bn<CR>
+
+"ir para o buffer anterior;
+nmap <S-TAB> :bp<CR>
+
+"refresh do visual do terminal;
+nmap v<F5> :redraw!<CR>
+
+"Cria diretorio de backup automaticamente;
+function! InitBackupDir()
+  if has('win32') || has('win32unix') "windows/cygwin
+    let l:separator = '_'
+  else
+    let l:separator = '.'
+  endif
+  let l:parent = $HOME . '/' . l:separator . 'vim/'
+  let l:backup = l:parent . 'backup/'
+  let l:tmp = l:parent . 'tmp/'
+  let l:undo= l:parent . 'undo/'
+  if exists('*mkdir')
+    if !isdirectory(l:parent)
+      call mkdir(l:parent)
+    endif
+    if !isdirectory(l:backup)
+      call mkdir(l:backup)
+    endif
+    if !isdirectory(l:tmp)
+      call mkdir(l:tmp)
+    endif
+    if !isdirectory(l:undo)
+      call mkdir(l:undo)
+    endif
+  endif
+  let l:missing_dir = 0
+  if isdirectory(l:tmp)
+    execute 'set backupdir=' . escape(l:backup, ' ') . '/,.'
+  else
+    let l:missing_dir = 1
+  endif
+  if isdirectory(l:backup)
+    execute 'set directory=' . escape(l:tmp, ' ') . '/,.'
+  else
+    let l:missing_dir = 1
+  endif
+  if isdirectory(l:undo)
+    execute 'set undodir=' . escape(l:undo, ' ') . '/,.'
+  else
+    let l:missing_dir = 1
+  endif
+  if l:missing_dir
+    echo 'Warning: Unable to create backup directories:' l:backup 'and' l:tmp 'and' l:undo
+    echo 'Try: mkdir -p' l:backup
+    echo 'and: mkdir -p' l:tmp
+    echo 'and: mkdir -p' l:undo
+    set backupdir=.
+    set directory=.
+    set undodir=.
+  endif
+endfunction
+call InitBackupDir()
+
+
+"Redimensionar o tamanho da janela;
+map <silent> t<left> <C-w><
+map <silent> t<down> <C-W>-
+map <silent> t<up> <C-W>+
+map <silent> t<right> <C-w>>
+
+"exibir lista de marcas no arquivo;
+map <Leader>m :marks<CR>
+
+"exibir a lista de alterações;
+map <Leader>c :changes<CR>
+
+"exibir a lista de saltos;
+map <Leader>j :jumps<CR>
+
+"exibir a lista de comandos;
+map <Leader>h :history<CR>
+
+
+"---------------------------------------------------------------------------------------------
+
+
 
 "Cores disponíveis:
 "*cterm-colors*
@@ -236,17 +316,6 @@ highlight PmenuSel ctermfg=12 ctermbg=9
 highlight Pmenu ctermfg=0 ctermbg=15
 
 
-"listar os buffers aberto;
-nmap <Leader>b :ls<CR>
-
-"ir para o proximo buffer;
-nmap <TAB> :bn<CR>
-
-"ir para o buffer anterior;
-nmap <S-TAB> :bp<CR>
-
-"refresh do visual do terminal;
-nmap v<F5> :redraw!<CR>
 "*************************************************
 
 
@@ -612,77 +681,6 @@ map <SPACE> :call AceJumpLetras()<CR>
 map <F2> :call AceJumpLinhas()<CR>
 
 
-"Cria diretorio de backup automaticamente;
-function! InitBackupDir()
-  if has('win32') || has('win32unix') "windows/cygwin
-    let l:separator = '_'
-  else
-    let l:separator = '.'
-  endif
-  let l:parent = $HOME . '/' . l:separator . 'vim/'
-  let l:backup = l:parent . 'backup/'
-  let l:tmp = l:parent . 'tmp/'
-  let l:undo= l:parent . 'undo/'
-  if exists('*mkdir')
-    if !isdirectory(l:parent)
-      call mkdir(l:parent)
-    endif
-    if !isdirectory(l:backup)
-      call mkdir(l:backup)
-    endif
-    if !isdirectory(l:tmp)
-      call mkdir(l:tmp)
-    endif
-    if !isdirectory(l:undo)
-      call mkdir(l:undo)
-    endif
-  endif
-  let l:missing_dir = 0
-  if isdirectory(l:tmp)
-    execute 'set backupdir=' . escape(l:backup, ' ') . '/,.'
-  else
-    let l:missing_dir = 1
-  endif
-  if isdirectory(l:backup)
-    execute 'set directory=' . escape(l:tmp, ' ') . '/,.'
-  else
-    let l:missing_dir = 1
-  endif
-  if isdirectory(l:undo)
-    execute 'set undodir=' . escape(l:undo, ' ') . '/,.'
-  else
-    let l:missing_dir = 1
-  endif
-  if l:missing_dir
-    echo 'Warning: Unable to create backup directories:' l:backup 'and' l:tmp 'and' l:undo
-    echo 'Try: mkdir -p' l:backup
-    echo 'and: mkdir -p' l:tmp
-    echo 'and: mkdir -p' l:undo
-    set backupdir=.
-    set directory=.
-    set undodir=.
-  endif
-endfunction
-call InitBackupDir()
-
-
-"Redimensionar o tamanho da janela;
-map <silent> t<left> <C-w><
-map <silent> t<down> <C-W>-
-map <silent> t<up> <C-W>+
-map <silent> t<right> <C-w>>
-
-"exibir lista de marcas no arquivo;
-map <Leader>m :marks<CR>
-
-"exibir a lista de alterações;
-map <Leader>c :changes<CR>
-
-"exibir a lista de saltos;
-map <Leader>j :jumps<CR>
-
-"exibir a lista de comandos;
-map <Leader>h :history<CR>
 
 "inserir comentário(//) no inicio da linha do cursor;
 "nmap <C-/> :s/^/\/\//g<CR>:nohlsearch<CR>
