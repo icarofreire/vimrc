@@ -92,6 +92,7 @@ set linebreak
 set number
 set ruler
 
+set relativenumber
 set nu       "mostra numeração de linhas
 set showmode "mostra o modo em que estamos
 set showcmd  "mostra no status os comandos inseridos
