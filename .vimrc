@@ -88,13 +88,10 @@ map <F10> :call Salvar_como()<cr>
 set expandtab
 set shiftwidth=4
 set tabstop=4
-
-"Régua, quebra e número de linhas:
-set linebreak
-set number
+set linebreak   "quebra de linha
+set number  "numero de linhas
 set ruler
-
-set relativenumber
+set relativenumber  "numeros relativos;
 set nu       "mostra numeração de linhas
 set showmode "mostra o modo em que estamos
 set showcmd  "mostra no status os comandos inseridos
@@ -103,7 +100,7 @@ syntax on    "habilita cores
 set hls      "destaca com cores os termos procurados
 set incsearch "habilita a busca incremental
 set ai       "auto identação
-"set aw       "salvamento automático - veja :help aw
+set aw       "salvamento automático - veja :help aw
 set ignorecase "faz o vim ignorar maiúsculas e minúsculas nas buscas
 set smartcase  "Se começar uma busca em maiúsculo ele habilita o case
 "set cursorcolumn "deixa visivel um cursor de coluna;
@@ -132,6 +129,9 @@ nmap <C-RIGHT> :vsp<CR>
 "dividir a tela horizontalmente
 nmap <C-UP> :sp<CR>
 nmap <C-DOWN> :sp<CR>
+
+"deletar uma palavra inteira em modo de inserção;
+imap <C-e> <C-o>ciw
 
 "colar no arquivo o conteúdo da memoria do clipboard(texto copiado em outra
 "área no computador);
@@ -227,6 +227,12 @@ map <Leader>h :history<CR>
 "abrir lista de arquivos recentemente abertos;
 "(Aberta a lista, pressione 'ESC' ou 'q' para cancelar o '-- More --' e digitar o número do arquivo a ser aberto da lista);
 map <Leader>r :browse oldfiles<CR>
+
+"Fechamento automático em modo de inserção;
+imap ( ()<esc>i
+imap ( ()<esc>i
+imap { {<Char-13><Char-13>}<esc>i
+imap [ []<esc>i
 
 
 "Cria diretorio de backup automaticamente;
