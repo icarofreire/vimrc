@@ -224,6 +224,10 @@ map <Leader>j :jumps<CR>
 "exibir a lista de comandos;
 map <Leader>h :history<CR>
 
+"abrir lista de arquivos recentemente abertos;
+"(Aberta a lista, pressione 'ESC' ou 'q' para cancelar o '-- More --' e digitar o número do arquivo a ser aberto da lista);
+map <Leader>r :browse oldfiles<CR>
+
 
 "Cria diretorio de backup automaticamente;
 function! InitBackupDir()
