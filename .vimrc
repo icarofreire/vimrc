@@ -6,7 +6,14 @@ behave mswin
 " source $VIM/codigo.vim
 " source $HOME/codigo.vim
 " source $VIMRUNTIME/codigo.vim
-"source $VIM/EasyMotion.vim
+"
+"
+"   Quick reference guide:
+"   http://vimhelp.appspot.com/quickref.txt.html
+"
+"   Vim documentation: help
+"   http://vimdoc.sourceforge.net/htmldoc/
+
 
 set diffexpr=MyDiff()
 function MyDiff()
@@ -41,6 +48,7 @@ endfunction
 
 "---------------------------------------------------------------------------------------------
 "Configurações do vimrc;
+"
 
 "map  - funciona em qualquer modo;
 "nmap - apenas no modo Normal;
@@ -90,7 +98,7 @@ set shiftwidth=4
 set tabstop=4
 set linebreak   "quebra de linha
 set number  "numero de linhas
-set ruler
+set ruler   "Sempre mostre a posição do cursor;
 set relativenumber  "numeros relativos;
 set nu       "mostra numeração de linhas
 set showmode "mostra o modo em que estamos
