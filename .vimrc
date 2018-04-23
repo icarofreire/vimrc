@@ -308,31 +308,4 @@ endfunction
 nmap <C-/> :call Inserir_e_retirar_comentario()<CR>:nohlsearch<CR>
 
 
-" Melhor pesquisa incremental.
-" <Tab> faz o que 'n' faz, apenas sem sair da pesquisa incremental. (Estilo Emacs)
-" <S-Tab> faz o que 'N' faz, apenas sem sair da pesquisa incremental. (Estilo Emacs)
-set wildcharm=<C-z>
-function! BetterIncSearch(key)
-    if getcmdtype() == "/" || getcmdtype() == "?"
-        if (a:key == "tab" && b:direction == "f") || (a:key == "stab" && b:direction == "b")
-            return "\<CR>/\<C-r>/"
-        elseif (a:key == "tab" && b:direction == "b") || (a:key == "stab" && b:direction == "f")
-            return "\<CR>?\<C-r>/"
-        endif
-    else
-        if a:key == "tab"
-            return "\<C-z>"
-        else
-            return "\<S-Tab>"
-        endif
-    endif
-endfunction
-
-nnoremap / :let b:direction = "f"<CR>/
-nnoremap ? :let b:direction = "b"<CR>?
-
-cnoremap <expr> <Tab>   BetterIncSearch("tab")
-cnoremap <expr> <S-Tab> BetterIncSearch("stab")
-
-
 "---------------------------------------------------------------------------------------------
