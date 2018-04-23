@@ -120,6 +120,11 @@ set fileencoding=utf-8
 :set laststatus=2
 :set statusline=%<%F\ %n%h%m%r%=%-14.(%l,%c%V%)\ %=\%L\ \%P
 
+" Mudar as cores sinalizadoras do resultado de busca;
+" ctermfg is for foreground color;
+" ctermbg is for background color;
+hi Search ctermfg=DarkRed ctermbg=DarkGreen
+
 "abre um menu atravez da tecla tab depois de escrever o comando;
 set wildmenu
 set wildmode=longest:list,full
@@ -185,7 +190,7 @@ map <S-F5> :so $MYVIMRC<CR>
 map <S-F2> :Texplore<CR>:e $MYVIMRC<CR>
 
 "desabilita a coloração da busca até a próxima busca;
-map <esc><esc> :nohlsearch<CR>
+map <space><space> :nohlsearch<CR>
 
 "fechar janela;
 map <F11> :q<CR>
@@ -235,12 +240,6 @@ map <Leader>h :history<CR>
 "abrir lista de arquivos recentemente abertos;
 "(Aberta a lista, pressione 'ESC' ou 'q' para cancelar o '-- More --' e digitar o número do arquivo a ser aberto da lista);
 map <Leader>r :browse oldfiles<CR>
-
-"Fechamento automático em modo de inserção;
-imap ( ()<esc>i
-imap ( ()<esc>i
-imap { {<Char-13><Char-13>}<esc>i
-imap [ []<esc>i
 
 
 "Cria diretorio de backup automaticamente;
