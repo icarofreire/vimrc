@@ -193,7 +193,7 @@ map <S-F2> :Texplore<CR>:e $MYVIMRC<CR>
 map <space><space> :nohlsearch<CR>
 
 "fechar janela;
-map <F11> :q<CR>
+map <F11> :q!<CR>
 
 "trocar de janela separada na mesma aba(o mesmo que ctrl+w);
 map <Leader>w :wincmd w<CR>
