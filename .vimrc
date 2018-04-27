@@ -135,14 +135,6 @@ map <S-CR> :Explore<CR>
 "abre uma nova aba;
 map <S-t> :tabnew<CR>
 
-"dividir a tela verticalmente;
-nmap <C-LEFT> :vsp<CR>
-nmap <C-RIGHT> :vsp<CR>
-
-"dividir a tela horizontalmente
-nmap <C-UP> :sp<CR>
-nmap <C-DOWN> :sp<CR>
-
 "deletar uma palavra inteira em modo de inserção;
 imap <C-e> <C-o>ciw
 
@@ -227,15 +219,6 @@ map <silent> t<right> <C-w>>
 
 "exibir lista de marcas no arquivo;
 map <Leader>m :marks<CR>
-
-"exibir a lista de alterações;
-map <Leader>c :changes<CR>
-
-"exibir a lista de saltos;
-map <Leader>j :jumps<CR>
-
-"exibir a lista de comandos;
-map <Leader>h :history<CR>
 
 "abrir lista de arquivos recentemente abertos;
 "(Aberta a lista, pressione 'ESC' ou 'q' para cancelar o '-- More --' e digitar o número do arquivo a ser aberto da lista);
