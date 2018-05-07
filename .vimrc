@@ -53,21 +53,23 @@ endfunction
 "map  - funciona em qualquer modo;
 "nmap - apenas no modo Normal;
 "imap - apenas no modo de Inserção;
+"cmap - funciona em modo de linha de comando (':');
 "% => Nome do arquivo atual com extensão;
 "%< => Nome do arquivo atual sem extensão;
 ":p => Arquivo atual com seu caminho completo;
 
 
-" Dica de REGEX para substituição e inserção;
-" \num
-" Onde num é um inteiro positivo. Faz referência a substring pertencente à um grupo, um grupo é definido entre "parênteses. Grupos são numerados de 1 até 9.
-" Repetir o conteúdo encontrado pela regex numa substituição(Para isso, deve-se utilizar grupo '()');
-"  o '\número' memoriza o conteudo do grupo captado pela regex;
-" \1 = primeiro grupo; \2 = segundo grupo; \3 = terceiro grupo; ...
-" :s/\(<regex dentro do grupo para procurar>\)/\1<conteudo para adicionar apos o match>/g
-" ou
-" :s/\(<regex dentro do grupo para procurar>\)/<conteudo para adicionar apos o match>\1/g
+" mapear a tecla 'leader' para a tecla que desejar;
+let mapleader = "-"
 
+" Usar espaço para fazer a mesma coisa que ':' ;
+nmap <space> :
+
+"abre arquivo .vimrc para edição;
+cmap ev :Texplore<CR>:e $MYVIMRC<CR>
+
+"recarregar o arquivo .vimrc apos ser editado(para não precisar reeiniciar o vim);
+cmap rv :so $MYVIMRC<CR>
 
 "sobe N linhas;
 map <F5> 10k
