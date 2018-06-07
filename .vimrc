@@ -87,11 +87,6 @@ set fileencoding=utf-8
 :set laststatus=2
 :set statusline=%<%F\ %n%h%m%r%=%-14.(%l,%c%V%)\ %=\%L\ \%P
 
-" Mudar as cores sinalizadoras do resultado de busca;
-" ctermfg is for foreground color;
-" ctermbg is for background color;
-hi Search ctermfg=DarkRed ctermbg=DarkGreen
-
 "abre um menu atravez da tecla tab depois de escrever o comando;
 set wildmenu
 set wildmode=longest:list,full
@@ -174,16 +169,6 @@ map <Leader>m :marks<CR>
 "(Aberta a lista, pressione 'ESC' ou 'q' para cancelar o '-- More --' e digitar o número do arquivo a ser aberto da lista);
 map <Leader>r :browse oldfiles<CR>
 
-
-function! NumberToggle()
-  if(&relativenumber == 1)
-    set norelativenumber
-  else
-    set relativenumber
-  endif
-endfunc
-"Exibe uma numeração relativa a posição do cursor (para pular N linhas acima ou para baixo);
-nnoremap <F12> :call NumberToggle()<CR>
 
 
 "exibir espaços em branco, tab, trilha de espaços em branco, e fim de linha;
