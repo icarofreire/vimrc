@@ -169,6 +169,8 @@ map <Leader>m :marks<CR>
 "(Aberta a lista, pressione 'ESC' ou 'q' para cancelar o '-- More --' e digitar o número do arquivo a ser aberto da lista);
 map <Leader>r :browse oldfiles<CR>
 
+"Abrir o manual de referência de comandos do próprio vim;
+map <Leader>h :help quickref<CR>
 
 
 "exibir espaços em branco, tab, trilha de espaços em branco, e fim de linha;
