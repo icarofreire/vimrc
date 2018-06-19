@@ -136,7 +136,7 @@ nmap <TAB> :bn<CR>
 nmap <S-TAB> :bp<CR>
 
 "refresh do visual do terminal;
-nmap v<F5> :redraw!<CR>
+nmap <S-F5> :redraw!<CR>
 
 "Redimensionar o tamanho da janela;
 map <silent> t<left> <C-w><
