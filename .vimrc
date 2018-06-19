@@ -144,6 +144,10 @@ map <silent> t<down> <C-W>-
 map <silent> t<up> <C-W>+
 map <silent> t<right> <C-w>>
 
+"saltar para caracteres (,{,[," e ';
+nnoremap <silent> <M-1> :call search("[\(\{\[\"\']", 'b')<CR>
+nnoremap <silent> <M-2> :call search("[\(\{\[\"\']")<CR>
+
 "desabilita a coloração da busca até a próxima busca;
 map <Leader>n :nohlsearch<CR>
 
@@ -262,3 +266,4 @@ nmap <C-/> :call Inserir_e_retirar_comentario()<CR>:nohlsearch<CR>
 
 
 "---------------------------------------------------------------------------------------------
+
