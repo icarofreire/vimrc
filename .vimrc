@@ -94,15 +94,12 @@ set wildmode=longest:list,full
 " possibilidade de mapear a tecla 'leader' para a tecla que desejar;
 "let mapleader = "-"
 
-" Teclas para fazer a mesma coisa que ':' ;
-nmap <space> :
+" fazer a mesma coisa que ':' ;
 nmap <F4> :
 
-"abre arquivo .vimrc para edição;
-cmap ev :Texplore<CR>:e $MYVIMRC<CR>
-
-"recarregar o arquivo .vimrc apos ser editado(para não precisar reeiniciar o vim);
-cmap rv :so $MYVIMRC<CR>
+" editar/recarregar o arquivo .vimrc;
+cmap ev :tabnew<CR>:e $MYVIMRC<CR>
+cmap sv :so $MYVIMRC<CR>
 
 "sobe N linhas;
 map <F5> 10k
