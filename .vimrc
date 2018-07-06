@@ -6,13 +6,6 @@ behave mswin
 " source $VIM/codigo.vim
 " source $HOME/codigo.vim
 " source $VIMRUNTIME/codigo.vim
-"
-"
-"   Quick reference guide:
-"   http://vimhelp.appspot.com/quickref.txt.html
-"
-"   Vim documentation: help
-"   http://vimdoc.sourceforge.net/htmldoc/
 
 
 set diffexpr=MyDiff()
@@ -46,7 +39,7 @@ function MyDiff()
 endfunction
 
 
-"---------------------------------------------------------------------------------------------
+"==============================================================================
 "Configurações do vimrc;
 "
 
@@ -60,8 +53,15 @@ endfunction
 " Para salvar o arquivo como: :w dir/arquivo
 
 
-"Tabs por espaços:
-set expandtab
+"   -nargs=0    No arguments are allowed (the default)
+"	-nargs=1    Exactly one argument is required
+"	-nargs=*    Any number of arguments are allowed (0, 1, or many)
+"	-nargs=?    0 or 1 arguments are allowed
+"	-nargs=+    Arguments must be supplied, but any number are allowed
+" command! -nargs=* Teclas <comandos a serem executados - não colocar '<CR>' no
+" final>
+
+set expandtab "Tabs por espaços;
 set shiftwidth=4
 set tabstop=4 "tamanho das tabulações
 set linebreak   "quebra de linha
@@ -78,8 +78,6 @@ set ai       "auto identação
 set aw       "salvamento automático - veja :help aw
 set ignorecase "faz o vim ignorar maiúsculas e minúsculas nas buscas
 set smartcase  "Se começar uma busca em maiúsculo ele habilita o case
-"set cursorcolumn "deixa visivel um cursor de coluna;
-"set cursorline "deixa visivel um cursor de linha;
 set encoding=utf-8
 set fileencoding=utf-8
 
@@ -141,6 +139,13 @@ map <silent> t<down> <C-W>-
 map <silent> t<up> <C-W>+
 map <silent> t<right> <C-w>>
 
+" navegação de janelas divididas (Splits);
+" esquerda/direita/cima/baixo;
+map <c-h> <c-w>h
+map <c-l> <c-w>l
+map <c-k> <c-w>k
+map <c-j> <c-w>j
+
 "saltar para caracteres (,{,[," e ';
 nnoremap <silent> <M-1> :call search("[\(\{\[\"\']", 'b')<CR>
 nnoremap <silent> <M-2> :call search("[\(\{\[\"\']")<CR>
@@ -153,6 +158,9 @@ map <Leader>o :Explore<CR>
 
 "fechar janela;
 map <Leader>f :q!<CR>
+
+"fechar todas as janelas;
+map <Leader>q :qa!<CR>
 
 "abre uma nova aba;
 map <Leader>t :tabnew<CR>
@@ -262,5 +270,4 @@ endfunction
 nmap <C-/> :call Inserir_e_retirar_comentario()<CR>:nohlsearch<CR>
 
 
-"---------------------------------------------------------------------------------------------
-
+"==============================================================================
