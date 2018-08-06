@@ -2,42 +2,15 @@ source $VIMRUNTIME/vimrc_example.vim
 source $VIMRUNTIME/mswin.vim
 behave mswin
 
+" navegação rápida no código (código modificado por minha pessoa);
+" https://github.com/vim-scripts/PreciseJump
+" source $HOME/PreciseJump.vim
+" nmap <space> :call PreciseJumpF(-1, -1, 0)<cr>
+
 " formas de inserir arquivo no .vimrc;
 " source $VIM/codigo.vim
 " source $HOME/codigo.vim
 " source $VIMRUNTIME/codigo.vim
-
-
-set diffexpr=MyDiff()
-function MyDiff()
-  let opt = '-a --binary '
-  if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
-  if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
-  let arg1 = v:fname_in
-  if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
-  let arg2 = v:fname_new
-  if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
-  let arg3 = v:fname_out
-  if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
-  if $VIMRUNTIME =~ ' '
-    if &sh =~ '\<cmd'
-      if empty(&shellxquote)
-        let l:shxq_sav = ''
-        set shellxquote&
-      endif
-      let cmd = '"' . $VIMRUNTIME . '\diff"'
-    else
-      let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
-    endif
-  else
-    let cmd = $VIMRUNTIME . '\diff'
-  endif
-  silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3
-  if exists('l:shxq_sav')
-    let &shellxquote=l:shxq_sav
-  endif
-endfunction
-
 
 "==============================================================================
 "Configurações do vimrc;
@@ -50,16 +23,7 @@ endfunction
 "% => Nome do arquivo atual com extensão;
 "%< => Nome do arquivo atual sem extensão;
 ":p => Arquivo atual com seu caminho completo;
-" Para salvar o arquivo como: :w dir/arquivo
 
-
-"   -nargs=0    No arguments are allowed (the default)
-"	-nargs=1    Exactly one argument is required
-"	-nargs=*    Any number of arguments are allowed (0, 1, or many)
-"	-nargs=?    0 or 1 arguments are allowed
-"	-nargs=+    Arguments must be supplied, but any number are allowed
-" command! -nargs=* Teclas <comandos a serem executados - não colocar '<CR>' no
-" final>
 
 set expandtab "Tabs por espaços;
 set shiftwidth=4
@@ -93,7 +57,7 @@ set wildmode=longest:list,full
 "let mapleader = "-"
 
 " fazer a mesma coisa que ':' ;
-nmap <F4> :
+map <F4> :
 
 " editar/recarregar o arquivo .vimrc;
 cmap ev :tabnew<CR>:e $MYVIMRC<CR>
@@ -110,6 +74,13 @@ map <CR> gg
 
 "deletar uma palavra inteira em modo de inserção;
 imap <C-e> <C-o>ciw
+
+"atalho para saltar para o final de cada palavra;
+map <M-e> ge
+
+"trocar de abas (direita/esquerda);
+map <M-s> gt
+map <M-a> gT
 
 "colar no arquivo o conteúdo da memoria do clipboard(texto copiado em outra
 "área no computador);
