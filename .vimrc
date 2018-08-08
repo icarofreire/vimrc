@@ -2,11 +2,6 @@ source $VIMRUNTIME/vimrc_example.vim
 source $VIMRUNTIME/mswin.vim
 behave mswin
 
-" navegação rápida no código (código modificado por minha pessoa);
-" https://github.com/vim-scripts/PreciseJump
-" source $HOME/PreciseJump.vim
-" nmap <space> :call PreciseJumpF(-1, -1, 0)<cr>
-
 " formas de inserir arquivo no .vimrc;
 " source $VIM/codigo.vim
 " source $HOME/codigo.vim
@@ -58,10 +53,11 @@ set wildmode=longest:list,full
 
 " fazer a mesma coisa que ':' ;
 map <F4> :
+nmap <space> :
 
 " editar/recarregar o arquivo .vimrc;
 cmap ev :tabnew<CR>:e $MYVIMRC<CR>
-cmap sv :so $MYVIMRC<CR>
+cmap sv :so $MYVIMRC<CR>:nohlsearch<CR>
 
 "sobe N linhas;
 map <F5> 10k
@@ -85,10 +81,6 @@ map <M-a> gT
 "colar no arquivo o conteúdo da memoria do clipboard(texto copiado em outra
 "área no computador);
 map <M-p> "+p
-
-"compila um programa C++;
-map <F8> :w!<CR>:!g++ -std=c++11 -Wall % -o %<<CR>
-map <S-F8> :!%<.exe<CR>
 
 "salvar automaticamente o arquivo 1/2 segundo após cada alteração(SOMENTE se o arquivo
 "já existe);
@@ -144,6 +136,9 @@ nmap <Leader>b :ls<CR>
 
 "exibir lista de marcas no arquivo;
 map <Leader>m :marks<CR>
+
+"deletar marcas facilmente;
+map <Leader>d :delm<space>
 
 "abrir lista de arquivos recentemente abertos;
 "(Aberta a lista, pressione 'ESC' ou 'q' para cancelar o '-- More --' e digitar o número do arquivo a ser aberto da lista);
@@ -240,5 +235,24 @@ function! Inserir_e_retirar_comentario()
 endfunction
 nmap <C-/> :call Inserir_e_retirar_comentario()<CR>:nohlsearch<CR>
 
+
+" -- resolver o problema de combinações com a tecla alt não funcionar no terminal do linux;
+function! Ativar_alt_term_linux()
+    let c='a'
+    while c <= 'z'
+      exec "set <A-".c.">=\e".c
+      exec "imap \e".c." <A-".c.">"
+      let c = nr2char(1+char2nr(c))
+    endw
+
+    let c='0'
+    while c <= '9'
+      exec "set <A-".c.">=\e".c
+      exec "imap \e".c." <A-".c.">"
+      let c = nr2char(1+char2nr(c))
+    endw
+    set timeout ttimeoutlen=50
+endfunction
+call Ativar_alt_term_linux()
 
 "==============================================================================
