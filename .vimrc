@@ -91,6 +91,10 @@ map <M-p> "+p
 "filtrar resultados de arquivos já abertos;
 noremap <M-r> :browse filter // oldfiles<C-Left><C-Left><Right>
 
+"copia para um arquivo texto todo o historico de arquivos abertos e apaga os
+"numeros da ordem dos arquivos;
+noremap <M-o> :set nomore<CR>:redir! > oldfiles.txt<CR>:oldfiles<CR>:redir END<CR>:set more<CR><CR>:vsp oldfiles.txt<CR>:%s/^[0-9]*: //g<CR>gg
+
 "salvar automaticamente o arquivo 1/2 segundo após cada alteração(SOMENTE se o arquivo
 "já existe);
 set updatetime=500
