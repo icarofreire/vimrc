@@ -48,6 +48,9 @@ set fileencoding=utf-8
 set wildmenu
 set wildmode=longest:list,full
 
+"pesquisar em subdiretórios recursivamente;
+set path+=**
+
 " possibilidade de mapear a tecla 'leader' para a tecla que desejar;
 "let mapleader = "-"
 
@@ -58,6 +61,9 @@ nmap <space> :
 " editar/recarregar o arquivo .vimrc;
 cmap ev :tabnew<CR>:e $MYVIMRC<CR>
 cmap sv :so $MYVIMRC<CR>:nohlsearch<CR>
+
+"pesquisar em todos os arquivos;
+cmap pes vimgrep // **/*<C-Left><C-Left><Right>
 
 "sobe N linhas;
 map <F5> 10k
@@ -81,6 +87,9 @@ map <M-a> gT
 "colar no arquivo o conteúdo da memoria do clipboard(texto copiado em outra
 "área no computador);
 map <M-p> "+p
+
+"filtrar resultados de arquivos já abertos;
+noremap <M-r> :browse filter // oldfiles<C-Left><C-Left><Right>
 
 "salvar automaticamente o arquivo 1/2 segundo após cada alteração(SOMENTE se o arquivo
 "já existe);
@@ -146,6 +155,12 @@ map <Leader>r :browse oldfiles<CR>
 
 "Abrir o manual de referência de comandos do próprio vim;
 map <Leader>h :help quickref<CR>
+
+"abrir lista de resultados da busca do vimgrep(:vimgrep /string/gj **/*);
+map <Leader>g :copen<CR>
+
+"pesquisar em subdiretórios pela parte do nome inserida, expandindo uma lista com os resultados com <Tab>;
+noremap <Leader>z :find **<Left>
 
 
 "exibir espaços em branco, tab, trilha de espaços em branco, e fim de linha;
@@ -253,6 +268,6 @@ function! Ativar_alt_term_linux()
     endw
     set timeout ttimeoutlen=50
 endfunction
-call Ativar_alt_term_linux()
+"call Ativar_alt_term_linux()
 
 "==============================================================================
