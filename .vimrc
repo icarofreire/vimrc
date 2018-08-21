@@ -48,6 +48,9 @@ set fileencoding=utf-8
 set wildmenu
 set wildmode=longest:list,full
 
+"exibir o netrw como uma arvore;
+let g:netrw_liststyle=3
+
 "pesquisar em subdiretórios recursivamente;
 set path+=**
 
@@ -252,7 +255,7 @@ function! Inserir_e_retirar_comentario()
         endif
     endif
 endfunction
-nmap <C-/> :call Inserir_e_retirar_comentario()<CR>:nohlsearch<CR>
+nmap <M-c> :call Inserir_e_retirar_comentario()<CR>:nohlsearch<CR>
 
 
 " -- resolver o problema de combinações com a tecla alt não funcionar no terminal do linux;
@@ -274,4 +277,48 @@ function! Ativar_alt_term_linux()
 endfunction
 "call Ativar_alt_term_linux()
 
+
+"listar todos os arquivos recursivamente a partir do diretório atual em um
+"buffer;
+map <F3> :call ListTree('.')<CR>
+function! ListTree(dir)
+  new
+  set buftype=nofile
+  set bufhidden=hide
+  set noswapfile
+  normal i.
+  while 1
+    let file = getline(".")
+    if (file == '')
+      normal dd
+    elseif (isdirectory(file))
+      normal dd
+      let @" = glob(file . "/*")
+      normal O
+      normal P
+      let @" = glob(file . "/.[^.]*")
+      if (@" != '')
+        normal O
+        normal P
+      endif
+    else
+      if (line('.') == line('$'))
+        return
+      else
+        normal j
+      endif
+    endif
+  endwhile
+endfunction
+
+
+"ativar a linha horizontal do cursor visível;
+function! CursorLinha()
+  if(&cursorline == 0)
+    set cursorline
+  else
+    set nocursorline
+  endif
+endfunc
+noremap <silent> <Leader>l :call CursorLinha()<CR>
 "==============================================================================
