@@ -6,6 +6,8 @@ behave mswin
 " source $VIM/codigo.vim
 " source $HOME/codigo.vim
 " source $VIMRUNTIME/codigo.vim
+ "source $HOME/EasyMotion.vim
+ source $HOME/PreciseJump.vim
 
 "==============================================================================
 "Configurações do vimrc;
@@ -58,8 +60,10 @@ set path+=**
 "let mapleader = "-"
 
 " fazer a mesma coisa que ':' ;
-map <F4> :
 nmap <space> :
+
+"saltar para a linhaa e coluna da marca;"
+map <F2> `
 
 " editar/recarregar o arquivo .vimrc;
 cmap ev :tabnew<CR>:e $MYVIMRC<CR>
@@ -67,6 +71,9 @@ cmap sv :so $MYVIMRC<CR>:nohlsearch<CR>
 
 "pesquisar em todos os arquivos;
 cmap pes vimgrep // **/*<C-Left><C-Left><Right>
+
+"faz substituição no conteúdo selecionado(movo visual);
+vmap <C-r> :s///g<Left><Left><Left>
 
 "sobe N linhas;
 map <F5> 10k
@@ -280,7 +287,7 @@ endfunction
 
 "listar todos os arquivos recursivamente a partir do diretório atual em um
 "buffer;
-map <F3> :call ListTree('.')<CR>
+"map <F3> :call ListTree('.')<CR>
 function! ListTree(dir)
   new
   set buftype=nofile
