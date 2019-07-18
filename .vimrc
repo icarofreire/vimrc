@@ -66,25 +66,21 @@ map <F2> `
 "executar a ultima macro executada;
 map <F4> @@
 
-"compilar e executar arquivos C++ padrão c++11;
-nnoremap <f8> :!g++ -Wall -o  %:r % -std=c++11<Enter>
-nnoremap <f9> :!%:r
-
 " editar/recarregar o arquivo .vimrc;
-cmap ev :tabnew<CR>:e $MYVIMRC<CR>
-cmap sv :so $MYVIMRC<CR>:nohlsearch<CR>
+nmap -ev :tabnew<CR>:e $MYVIMRC<CR>
+nmap -sv :so $MYVIMRC<CR>:nohlsearch<CR>
 
 "pesquisar em todos os arquivos;
-cmap pes vimgrep // **/*<C-Left><C-Left><Right>
+nmap -pes :vimgrep // **/*<C-Left><C-Left><Right>
 
 "faz substituição no conteúdo selecionado(movo visual);
 vmap <C-r> :s###g<Left><Left><Left>
 
 "faz substituição em todo o arquivo(modo comando);
-cmap sub %s###g<Left><Left><Left>
+nmap <M-k> :%s###g<Left><Left><Left>
 
 "faz substituição em uma linha(modo comando);
-cmap lsub s###<Left><Left>
+nmap <M-l> :s###<Left><Left>
 
 "sobe N linhas;
 map <F5> 10k
@@ -348,4 +344,23 @@ function! CursorLinha()
   endif
 endfunc
 noremap <silent> <Leader>l :call CursorLinha()<CR>
+
+
+"simula o comando M-x do Emacs;
+function! Mx()
+    let cmd = input("Inserir um comando:")
+    if cmd == "beer" "<<-- string a ser comparada para executar o comando desejado;
+        echo "Cheers!"
+    "elseif cmd ==
+    elseif cmd == "cpp" "compilar e executar arquivos C++ padrão c++11;
+        :!g++ -Wall -o  %:r % -std=c++11
+    elseif cmd == "exe" "executar arquivo
+        :!%:r
+    elseif cmd == "s"
+        :wa
+    else
+        echo " -- Não encontrado --"
+    endif
+endfunction
+nmap <F8> :call Mx()<CR>
 "==============================================================================
