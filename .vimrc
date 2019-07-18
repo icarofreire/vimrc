@@ -118,8 +118,11 @@ noremap <M-o> :set nomore<CR>:redir! > oldfiles.txt<CR>:oldfiles<CR>:redir END<C
 
 "salvar automaticamente o arquivo 1/2 segundo após cada alteração(SOMENTE se o arquivo
 "já existe);
-set updatetime=500
-:autocmd CursorHold,CursorHoldI,BufLeave * silent! :update
+function! AutoSave()
+    set updatetime=500
+    :autocmd CursorHold,CursorHoldI,BufLeave * silent! :update
+endfunction
+call AutoSave()
 
 "ir para o proximo buffer;
 nmap <TAB> :bn<CR>
@@ -146,6 +149,12 @@ map <c-j> <c-w>j
 "saltar para caracteres (,{,[," e ';
 nnoremap <silent> <M-1> :call search("[\(\{\[\"\']", 'b')<CR>
 nnoremap <silent> <M-2> :call search("[\(\{\[\"\']")<CR>
+
+"trocar a palavra do cursor para a proxima palavra;
+:nnoremap <silent> gr "_yiw:s/\(\%#\w\+\)\(\_W\+\)\(\w\+\)/\3\2\1/<CR><c-o>/\w\+\_W\+<CR><c-l>:nohlsearch<CR>
+
+"trocar a palavra do cursor para uma palavra anterior;
+:nnoremap <silent> gl "_yiw?\w\+\_W\+\%#<CR>:s/\(\%#\w\+\)\(\_W\+\)\(\w\+\)/\3\2\1/<CR><c-o><c-l>:nohlsearch<CR>
 
 "desabilita a coloração da busca até a próxima busca;
 map <Leader>n :nohlsearch<CR>
@@ -265,7 +274,7 @@ function! Inserir_e_retirar_comentario()
         else
             s/^/\/\//g "insere comentário;
         endif
-    elseif fileType == 'python'
+    elseif fileType == 'python' || fileType == 'ruby'
         if line[0] == "#"
             s/^#//g "apaga comentário;
         else
