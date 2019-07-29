@@ -63,6 +63,8 @@ nmap <space> :
 "saltar para a linhaa e coluna da marca;"
 map <F2> `
 
+map <F3> :wa<CR>
+
 "executar a ultima macro executada;
 map <F4> @@
 
@@ -107,10 +109,6 @@ map <M-p> "+p
 
 "filtrar resultados de arquivos já abertos;
 noremap <M-r> :browse filter // oldfiles<C-Left><C-Left><Right>
-
-"copia para um arquivo texto todo o historico de arquivos abertos e apaga os
-"numeros da ordem dos arquivos;
-noremap <M-o> :set nomore<CR>:redir! > oldfiles.txt<CR>:oldfiles<CR>:redir END<CR>:set more<CR><CR>:vsp oldfiles.txt<CR>:%s/^[0-9]*: //g<CR>gg
 
 "salvar automaticamente o arquivo 1/2 segundo após cada alteração(SOMENTE se o arquivo
 "já existe);
@@ -305,7 +303,8 @@ endfunction
 "buffer;
 "map <F3> :call ListTree('.')<CR>
 function! ListTree(dir)
-  new
+  "new
+  vnew
   set buftype=nofile
   set bufhidden=hide
   set noswapfile
@@ -349,6 +348,14 @@ noremap <silent> <Leader>l :call CursorLinha()<CR>
 "simula o comando M-x do Emacs;
 function! Mx()
     let cmd = input("Inserir um comando:")
+    let arr = split(cmd)
+    let arg1 = ''
+    let arg2 = ''
+    if len(arr) > 1
+        let arg1 = arr[0]
+        let arg2 = arr[1]
+    endif
+
     if cmd == "beer" "<<-- string a ser comparada para executar o comando desejado;
         echo "Cheers!"
     "elseif cmd ==
@@ -358,6 +365,12 @@ function! Mx()
         :!%:r
     elseif cmd == "s"
         :wa
+    elseif arg1 == "dois" "<< compara com o primeiro argumento, e executa o segundo argumento 'arg2';
+        echo arg2
+    elseif cmd == "my7"
+        :%s#mysql_#mysqli_#g
+    elseif cmd == "tree"
+        :call ListTree('.')
     else
         echo " -- Não encontrado --"
     endif
