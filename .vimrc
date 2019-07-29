@@ -345,6 +345,31 @@ endfunc
 noremap <silent> <Leader>l :call CursorLinha()<CR>
 
 
+"Realiza uma busca por string em todo o diretorio do projeto utilizando o git-grep (O Git deve estar instalado);
+"A opção '--no-index' Se git grep é executado fora de um repositório git;
+":G string
+function! Grep(args)
+    let grepprg_bak=&grepprg
+    let g:mygrepprg="git\\ grep\\ -ni"
+    let g:grepcmd="silent! grep --no-index " . a:args
+
+    exec "set grepprg=" . g:mygrepprg
+    execute g:grepcmd
+    botright copen
+    let &grepprg=grepprg_bak
+    exec "redraw!"
+endfunction
+
+func GrepWord()
+  normal! "zyiw
+  call Grep(getreg('z'))
+endf
+
+"realizar uma busca da palavra sob o cursor;
+nmap <C-x><C-x> :call GrepWord()<CR>
+command! -nargs=1 G call Grep('<args>')
+
+
 "simula o comando M-x do Emacs;
 function! Mx()
     let cmd = input("Inserir um comando:")
@@ -365,12 +390,14 @@ function! Mx()
         :!%:r
     elseif cmd == "s"
         :wa
-    elseif arg1 == "dois" "<< compara com o primeiro argumento, e executa o segundo argumento 'arg2';
-        echo arg2
+    "elseif arg1 == "dois" "<< compara com o primeiro argumento, e executa o segundo argumento 'arg2';
+    "   echo arg2
     elseif cmd == "my7"
         :%s#mysql_#mysqli_#g
     elseif cmd == "tree"
         :call ListTree('.')
+    elseif arg1 == "g"
+        :call Grep(arg2)
     else
         echo " -- Não encontrado --"
     endif
