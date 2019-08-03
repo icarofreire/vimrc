@@ -68,7 +68,7 @@ map <F3> :wa<CR>
 "executar a ultima macro executada;
 map <F4> @@
 
-" editar/recarregar o arquivo .vimrc;
+"editar/recarregar o arquivo .vimrc;
 nmap -ev :tabnew<CR>:e $MYVIMRC<CR>
 nmap -sv :so $MYVIMRC<CR>:nohlsearch<CR>
 
@@ -83,6 +83,19 @@ nmap <M-k> :%s###g<Left><Left><Left>
 
 "faz substituição em uma linha(modo comando);
 nmap <M-l> :s###<Left><Left>
+
+"abrir qualquer arquivo recursivamente para o buffer;
+nmap <M-o> :arg **/*.*<CR>
+
+"abrir recursivamente arquivos especificos para o buffer;
+nmap <M-i> :arg **/*.cpp
+
+"faz uma substituição em todos os arquivos no buffer;
+nmap <M-b> :argdo %s###ge
+
+"faz uma listagem de todos os arquivos no buffer; E insere logo o numero do buffer para abri-lo;
+"se a lista do buffer estiver grande, precione espaço <Space> para logo iserir o numero do buffer desejado;
+nnoremap <F7> :buffers<CR>:buffer<Space>
 
 "sobe N linhas;
 map <F5> 10k
@@ -373,34 +386,34 @@ command! -nargs=1 G call Grep('<args>')
 "simula o comando M-x do Emacs;
 function! Mx()
     let cmd = input("Inserir um comando:")
-    let arr = split(cmd)
-    let arg1 = ''
-    let arg2 = ''
-    if len(arr) > 1
-        let arg1 = arr[0]
-        let arg2 = arr[1]
-    endif
+    let cmd = split(cmd)
 
-    if cmd == "beer" "<<-- string a ser comparada para executar o comando desejado;
-        echo "Cheers!"
-    "elseif cmd ==
-    elseif cmd == "cpp" "compilar e executar arquivos C++ padrão c++11;
-        :!g++ -Wall -o  %:r % -std=c++11
-    elseif cmd == "exe" "executar arquivo
-        :!%:r
-    elseif cmd == "s"
-        :wa
-    "elseif arg1 == "dois" "<< compara com o primeiro argumento, e executa o segundo argumento 'arg2';
-    "   echo arg2
-    elseif cmd == "my7"
-        :%s#mysql_#mysqli_#g
-    elseif cmd == "tree"
-        :call ListTree('.')
-    elseif arg1 == "g"
-        :call Grep(arg2)
-    else
-        echo " -- Não encontrado --"
+    if len(cmd) > 0
+        if cmd[0] == "beer" "<<-- string a ser comparada para executar o comando desejado;
+            echo "Cheers!"
+        elseif cmd[0] == "cpp" "compilar e executar arquivos C++ padrão c++11;
+            :!g++ -Wall -o  %:r % -std=c++11
+        elseif cmd[0] == "exe" "executar arquivo
+            :!%:r
+        elseif cmd[0] == "s"
+            :wa
+        elseif cmd[0] == "my7"
+            :%s#mysql_#mysqli_#g
+        elseif cmd[0] == "tree"
+            :call ListTree('.')
+        elseif cmd[0] == "g"
+            :call Grep(cmd[1])
+        elseif cmd[0] == "all" " <-- abrir qualquer arquivo recursivamente para o buffer;
+            :arg **/*.*
+        elseif cmd[0] == "allf" " <-- abrir recursivamente arquivos especificos para o buffer;
+            :execute 'arg **/*.' . cmd[1]
+        elseif cmd[0] == "suball" " <-- faz uma substituição em todos os arquivos no buffer;
+            :execute 'argdo %s#' . cmd[1] . '#' . cmd[2] . '#ge' . ' | update'
+        else
+            echo " -- Não encontrado --"
+        endif
     endif
 endfunction
 nmap <F8> :call Mx()<CR>
+nmap -x :call Mx()<CR>
 "==============================================================================
