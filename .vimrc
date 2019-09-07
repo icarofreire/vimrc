@@ -63,6 +63,7 @@ nmap <space> :
 "saltar para a linhaa e coluna da marca;"
 map <F2> `
 
+"salvar todos os buffers abertos;
 map <F3> :wa<CR>
 
 "executar a ultima macro executada;
@@ -74,6 +75,12 @@ nmap -sv :so $MYVIMRC<CR>:nohlsearch<CR>
 
 "pesquisar em todos os arquivos;
 nmap -pes :vimgrep // **/*<C-Left><C-Left><Right>
+
+"salvar todos os buffers abertos;
+nmap -w :wa<CR>
+
+"modificar cor para resultados na busca (verde);
+"hi Search ctermfg=DarkRed ctermbg=DarkGreen
 
 "faz substituição no conteúdo selecionado(movo visual);
 vmap <C-r> :s###g<Left><Left><Left>
@@ -116,6 +123,9 @@ map <M-e> ge
 map <M-s> gt
 map <M-a> gT
 
+"passar para a aba anterior - aba esquerda;
+nmap tg gT
+
 "colar no arquivo o conteúdo da memoria do clipboard(texto copiado em outra
 "área no computador);
 map <M-p> "+p
@@ -129,7 +139,7 @@ function! AutoSave()
     set updatetime=500
     :autocmd CursorHold,CursorHoldI,BufLeave * silent! :update
 endfunction
-call AutoSave()
+"call AutoSave()
 
 "ir para o proximo buffer;
 nmap <TAB> :bn<CR>
@@ -139,6 +149,9 @@ nmap <S-TAB> :bp<CR>
 
 "refresh do visual do terminal;
 nmap <S-F5> :redraw!<CR>
+
+"autocompletar palavras no modo de insercao
+imap <F5> <c-n>
 
 "Redimensionar o tamanho da janela;
 map <silent> t<left> <C-w><
@@ -358,6 +371,20 @@ endfunc
 noremap <silent> <Leader>l :call CursorLinha()<CR>
 
 
+" setar se o buffer poderá ser alterável ou não;
+function! Modfile()
+  if(&modifiable == 1)
+    "setar para o buffer nao poder ser modificado;
+    set nomodifiable
+    echo ' Buffer inalterável'
+  else
+    "setar para o buffer poder ser modificado;
+    set modifiable
+    echo ' Buffer alterável'
+  endif
+endfunc
+
+
 "Realiza uma busca por string em todo o diretorio do projeto utilizando o git-grep (O Git deve estar instalado);
 "A opção '--no-index' Se git grep é executado fora de um repositório git;
 ":G string
@@ -401,7 +428,7 @@ function! Mx()
             :%s#mysql_#mysqli_#g
         elseif cmd[0] == "tree"
             :call ListTree('.')
-        elseif cmd[0] == "g"
+        elseif cmd[0] == "grep"
             :call Grep(cmd[1])
         elseif cmd[0] == "all" " <-- abrir qualquer arquivo recursivamente para o buffer;
             :arg **/*.*
@@ -409,6 +436,8 @@ function! Mx()
             :execute 'arg **/*.' . cmd[1]
         elseif cmd[0] == "suball" " <-- faz uma substituição em todos os arquivos no buffer;
             :execute 'argdo %s#' . cmd[1] . '#' . cmd[2] . '#ge' . ' | update'
+        elseif cmd[0] == "mod"
+            :call Modfile()
         else
             echo " -- Não encontrado --"
         endif
