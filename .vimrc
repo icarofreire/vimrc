@@ -70,8 +70,8 @@ map <F4> @@
 nmap -ev :tabnew<CR>:e $MYVIMRC<CR>
 nmap -sv :so $MYVIMRC<CR>:nohlsearch<CR>
 
-"pesquisar em todos os arquivos;
-nmap -pes :vimgrep // **/*<C-Left><C-Left><Right>
+" mudar o buffer para o arquivo com a lista de arquivos e pastas do projeto;
+nmap -p :b project_files.txt<CR>
 
 "salvar todos os buffers abertos;
 nmap -w :wa<CR>
@@ -335,9 +335,9 @@ endfunction
 function! ListTree(dir)
   "new
   vnew
-  set buftype=nofile
-  set bufhidden=hide
-  set noswapfile
+  "set buftype=nofile
+  "set bufhidden=hide
+  "set noswapfile
   set cursorline
   normal i.
   while 1
@@ -356,6 +356,7 @@ function! ListTree(dir)
       endif
     else
       if (line('.') == line('$'))
+        :w! $VIM/project_files.txt
         return
       else
         normal j
