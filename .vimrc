@@ -63,9 +63,6 @@ nmap <space> :
 "saltar para a linhaa e coluna da marca;"
 map <F2> `
 
-"salvar todos os buffers abertos;
-map <F3> :wa<CR>
-
 "executar a ultima macro executada;
 map <F4> @@
 
@@ -78,6 +75,13 @@ nmap -pes :vimgrep // **/*<C-Left><C-Left><Right>
 
 "salvar todos os buffers abertos;
 nmap -w :wa<CR>
+nmap sa :wa<CR>
+
+"trocar de janela separada na mesma aba(o mesmo que ctrl+w);
+nmap tw :wincmd w<CR>
+
+"modificar a cor da selecao no modo visual;
+hi Visual cterm=bold ctermbg=Blue ctermfg=black
 
 "modificar cor para resultados na busca (verde);
 "hi Search ctermfg=DarkRed ctermbg=DarkGreen
@@ -102,7 +106,7 @@ nmap <M-b> :argdo %s###ge
 
 "faz uma listagem de todos os arquivos no buffer; E insere logo o numero do buffer para abri-lo;
 "se a lista do buffer estiver grande, precione espaço <Space> para logo iserir o numero do buffer desejado;
-nnoremap <F7> :buffers<CR>:buffer<Space>
+nmap sd :buffers<CR>:buffer<Space>
 
 "sobe N linhas;
 map <F5> 10k
@@ -334,6 +338,7 @@ function! ListTree(dir)
   set buftype=nofile
   set bufhidden=hide
   set noswapfile
+  set cursorline
   normal i.
   while 1
     let file = getline(".")
@@ -408,6 +413,52 @@ endf
 "realizar uma busca da palavra sob o cursor;
 nmap <C-x><C-x> :call GrepWord()<CR>
 command! -nargs=1 G call Grep('<args>')
+
+
+" detectar sistema operacional usado;
+function! Detect_OS()
+  let os = ''
+  if has("unix") " Unix
+    let os = 'unix'
+  elseif has("win32") || has("win64") " Windowns
+    let os = 'win'
+  elseif has("linux") " Linux
+    let os = 'linux'
+  elseif has("mac") " Mac
+    let os = 'mac'
+  else
+    let os = -1 " Unknown OS!!!!
+  endif
+  return os
+endfunction
+
+
+" executar comandos externos no terminal exibindo somente o resultado numa 
+" janela inferior;
+command! -complete=shellcmd -nargs=+ Shell call s:RunShellCommand(<q-args>)
+function! s:RunShellCommand(cmdline)
+  let isfirst = 1
+  let words = []
+  for word in split(a:cmdline)
+    if isfirst
+      let isfirst = 0  " don't change first word (shell command)
+    else
+      if word[0] =~ '\v[%#<]'
+        let word = expand(word)
+      endif
+      let word = shellescape(word, 1)
+    endif
+    call add(words, word)
+  endfor
+  let expanded_cmdline = join(words)
+  botright new
+  setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap
+  call setline(1, 'You entered:  ' . a:cmdline)
+  call setline(2, 'Expanded to:  ' . expanded_cmdline)
+  call append(line('$'), substitute(getline(2), '.', '=', 'g'))
+  silent execute '$read !'. expanded_cmdline
+  1
+endfunction
 
 
 "simula o comando M-x do Emacs;
