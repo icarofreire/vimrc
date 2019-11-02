@@ -334,7 +334,7 @@ endfunction
 "map <F3> :call ListTree('.')<CR>
 function! ListTree(dir)
   "new
-  vnew
+  "vnew
   "set buftype=nofile
   "set bufhidden=hide
   "set noswapfile
@@ -434,32 +434,22 @@ function! Detect_OS()
 endfunction
 
 
-" executar comandos externos no terminal exibindo somente o resultado numa 
-" janela inferior;
-command! -complete=shellcmd -nargs=+ Shell call s:RunShellCommand(<q-args>)
-function! s:RunShellCommand(cmdline)
-  let isfirst = 1
-  let words = []
-  for word in split(a:cmdline)
-    if isfirst
-      let isfirst = 0  " don't change first word (shell command)
-    else
-      if word[0] =~ '\v[%#<]'
-        let word = expand(word)
-      endif
-      let word = shellescape(word, 1)
-    endif
-    call add(words, word)
-  endfor
-  let expanded_cmdline = join(words)
-  botright new
-  setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap
-  call setline(1, 'You entered:  ' . a:cmdline)
-  call setline(2, 'Expanded to:  ' . expanded_cmdline)
-  call append(line('$'), substitute(getline(2), '.', '=', 'g'))
-  silent execute '$read !'. expanded_cmdline
-  1
+" realizar busca em texto selecionado no modo visual;
+function! s:getSelectedText()
+  let l:old_reg = getreg('"')
+  let l:old_regtype = getregtype('"')
+  norm gvy
+  let l:ret = getreg('"')
+  call setreg('"', l:old_reg, l:old_regtype)
+  exe "norm \<Esc>"
+  return l:ret
 endfunction
+
+vnoremap <silent> * :call setreg("/",
+    \ substitute(<SID>getSelectedText(),
+    \ '\_s\+',
+    \ '\\_s\\+', 'g')
+    \ )<Cr>n
 
 
 "simula o comando M-x do Emacs;
@@ -474,10 +464,6 @@ function! Mx()
             :!g++ -Wall -o  %:r % -std=c++11
         elseif cmd[0] == "exe" "executar arquivo
             :!%:r
-        elseif cmd[0] == "s"
-            :wa
-        elseif cmd[0] == "my7"
-            :%s#mysql_#mysqli_#g
         elseif cmd[0] == "tree"
             :call ListTree('.')
         elseif cmd[0] == "grep"
@@ -498,3 +484,4 @@ endfunction
 nmap <F8> :call Mx()<CR>
 nmap -x :call Mx()<CR>
 "==============================================================================
+
