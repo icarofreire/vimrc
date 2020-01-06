@@ -89,6 +89,9 @@ hi Visual cterm=bold ctermbg=Blue ctermfg=black
 "faz substituição no conteúdo selecionado(movo visual);
 vmap <C-r> :s###g<Left><Left><Left>
 
+"realizar uma busca por string em todos os buffers abertos;
+nmap <C-f> :bufdo %s//&/gic<Left><Left><Left><Left><Left><Left>
+
 "faz substituição em todo o arquivo(modo comando);
 nmap <M-k> :%s###g<Left><Left><Left>
 
@@ -484,4 +487,3 @@ endfunction
 nmap <F8> :call Mx()<CR>
 nmap -x :call Mx()<CR>
 "==============================================================================
-
