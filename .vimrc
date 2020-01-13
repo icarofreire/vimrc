@@ -135,7 +135,10 @@ nmap tg gT
 
 "colar no arquivo o conteúdo da memoria do clipboard(texto copiado em outra
 "área no computador);
-map <M-p> "+p
+map <M-p> "*p
+
+"copiar texto do vim para o clipboard;
+vmap <silent> <c-c> "*y
 
 "filtrar resultados de arquivos já abertos;
 noremap <M-r> :browse filter // oldfiles<C-Left><C-Left><Right>
