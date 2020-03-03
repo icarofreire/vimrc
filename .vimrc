@@ -43,6 +43,36 @@ set fileencoding=utf-8
 "deixa a barra de status visível;
 :set laststatus=2
 :set statusline=%<%F\ %n%h%m%r%=%-14.(%l,%c%V%)\ %=\%L\ \%P
+function! StatuslineGitBranch()
+  let b:gitbranch=""
+  if &modifiable
+    let l:gitrevparse=system("git rev-parse --abbrev-ref HEAD")
+    if l:gitrevparse!~"fatal: not a git repository"
+      let b:gitbranch="(".substitute(l:gitrevparse, '\n', '', 'g').")"
+    endif
+  endif
+  return b:gitbranch
+endfunction
+
+"deixa a barra de status visível;
+:set laststatus=2
+:set statusline=
+:set statusline+=%F
+:set statusline+=%h
+:set statusline+=%m
+:set statusline+=%r
+:set statusline+=\ 
+:set statusline+=%n
+:set statusline+=\ 
+":set statusline+=[Git-Branch:%{StatuslineGitBranch()}]
+:set statusline+=%=
+:set statusline+=L:%l,C:%c
+:set statusline+=\ 
+:set statusline+=T:%L
+:set statusline+=\ 
+:set statusline+=%P
+:set statusline+=\ 
+:set statusline+=%{strftime(\"%H:%M\")}
 
 "abre um menu atravez da tecla tab depois de escrever o comando;
 set wildmenu
@@ -62,6 +92,7 @@ nmap <space> :
 
 "saltar para a linhaa e coluna da marca;"
 map <F2> `
+map s `
 
 "executar a ultima macro executada;
 map <F4> @@
@@ -88,6 +119,9 @@ hi Visual cterm=bold ctermbg=Blue ctermfg=black
 
 "faz substituição no conteúdo selecionado(movo visual);
 vmap <C-r> :s###g<Left><Left><Left>
+
+"copiar texto do vim para o clipboard;
+vmap <silent> <c-c> "*y
 
 "realizar uma busca por string em todos os buffers abertos;
 nmap <C-f> :bufdo %s//&/gic<Left><Left><Left><Left><Left><Left>
@@ -122,6 +156,7 @@ map <CR> gg
 
 "deletar uma palavra inteira em modo de inserção;
 imap <C-e> <C-o>ciw
+nmap <BS> ciw
 
 "atalho para saltar para o final de cada palavra;
 map <M-e> ge
@@ -431,7 +466,7 @@ function! Detect_OS()
     let os = 'win'
   elseif has("linux") " Linux
     let os = 'linux'
-  elseif has("mac") " Mac
+  elseif has("mac") || has("macunix") " Mac
     let os = 'mac'
   else
     let os = -1 " Unknown OS!!!!
@@ -472,6 +507,8 @@ function! Mx()
             :!%:r
         elseif cmd[0] == "tree"
             :call ListTree('.')
+        elseif cmd[0] == "os"
+            :echo ' OS -> ' . Detect_OS()
         elseif cmd[0] == "grep"
             :call Grep(cmd[1])
         elseif cmd[0] == "all" " <-- abrir qualquer arquivo recursivamente para o buffer;
