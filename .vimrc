@@ -407,6 +407,23 @@ function! ListTree(dir)
 endfunction
 
 
+"listar todos os arquivos recursivamente a partir do diretório atual em um buffer;
+function! Arqs()
+    tabnew
+    set buftype=nofile
+    let files = split(globpath('.', '**'), '\n')
+    let linha = 0
+    for arq in files
+        :call append(linha, arq)
+        let linha = linha + 1
+    endfor
+    if linha > 0
+        ":w! $VIM/project_files.txt
+    endif
+endfunction
+nmap <F9> :call Arqs()<CR>
+
+
 "ativar a linha horizontal do cursor visível;
 function! CursorLinha()
   if(&cursorline == 0)
