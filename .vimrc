@@ -42,20 +42,6 @@ set fileencoding=utf-8
 
 "deixa a barra de status visível;
 :set laststatus=2
-:set statusline=%<%F\ %n%h%m%r%=%-14.(%l,%c%V%)\ %=\%L\ \%P
-function! StatuslineGitBranch()
-  let b:gitbranch=""
-  if &modifiable
-    let l:gitrevparse=system("git rev-parse --abbrev-ref HEAD")
-    if l:gitrevparse!~"fatal: not a git repository"
-      let b:gitbranch="(".substitute(l:gitrevparse, '\n', '', 'g').")"
-    endif
-  endif
-  return b:gitbranch
-endfunction
-
-"deixa a barra de status visível;
-:set laststatus=2
 :set statusline=
 :set statusline+=%F
 :set statusline+=%h
@@ -64,7 +50,6 @@ endfunction
 :set statusline+=\ 
 :set statusline+=%n
 :set statusline+=\ 
-":set statusline+=[Git-Branch:%{StatuslineGitBranch()}]
 :set statusline+=%=
 :set statusline+=L:%l,C:%c
 :set statusline+=\ 
@@ -116,6 +101,10 @@ hi Visual cterm=bold ctermbg=Blue ctermfg=black
 
 "modificar cor para resultados na busca (verde);
 "hi Search ctermfg=DarkRed ctermbg=DarkGreen
+
+" seleção rapida entre parenteses (), util para lisp programas;
+nmap ça va(
+nmap çi vi(
 
 "faz substituição no conteúdo selecionado(movo visual);
 vmap <C-r> :s###g<Left><Left><Left>
@@ -177,14 +166,6 @@ vmap <silent> <c-c> "*y
 
 "filtrar resultados de arquivos já abertos;
 noremap <M-r> :browse filter // oldfiles<C-Left><C-Left><Right>
-
-"salvar automaticamente o arquivo 1/2 segundo após cada alteração(SOMENTE se o arquivo
-"já existe);
-function! AutoSave()
-    set updatetime=500
-    :autocmd CursorHold,CursorHoldI,BufLeave * silent! :update
-endfunction
-"call AutoSave()
 
 "ir para o proximo buffer;
 nmap <TAB> :bn<CR>
@@ -333,7 +314,7 @@ call InitBackupDir()
 function! Inserir_e_retirar_comentario()
     let fileType = &ft
     let line = getline('.')
-    if fileType == 'c' || fileType == 'cpp' || fileType == 'php' || fileType == 'java'
+    if fileType == 'c' || fileType == 'cpp' || fileType == 'php' || fileType == 'java' || fileType == 'javascript'
         if line[0] == "/" && line[1] == "/"
             s/^\/\///g "apaga comentário;
         else
@@ -414,8 +395,10 @@ function! Arqs()
     let files = split(globpath('.', '**'), '\n')
     let linha = 0
     for arq in files
-        :call append(linha, arq)
-        let linha = linha + 1
+            if arq[-6:-1] != ".class"
+                :call append(linha, arq)
+                let linha = linha + 1
+            endif
     endfor
     if linha > 0
         ":w! $VIM/project_files.txt
